@@ -32,7 +32,7 @@ class ProductSummary(BaseModel):
 
 
 class AlternativeProduct(ProductSummary):
-    """A similar product that's in stock in the size the shopper wanted (recommend.py)."""
+    """A similar product that's in stock in the size the shopper wanted (tools.similar_in_size)."""
 
     why: str = Field(description="e.g. 'Also Pierson College' or 'Another crewneck'")
 

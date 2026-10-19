@@ -60,7 +60,7 @@ Vite dev server :5173 ── forwards /api and /images ──►  FastAPI :8000 
 | Website | `frontend/src/` (pages, components, `api.ts`, `chat.ts`, `shop.ts`, `productCache.ts`) | All pages, the chat panel, the wishlist and cart, and embroidery preview and try-on. The design is in `output/design.md`. |
 | API | `backend/main.py` | Every route: products, groups, accounts, chat, wishlist/cart/designs, shared wishlists, embroidery check |
 | Agent | `backend/agent.py`, `backend/prompts/prompt.md` | Builds the agent and runs one chat turn: tools, checks, fallbacks, audit |
-| Agent tools | `backend/tools.py`, `backend/sizing.py`, `backend/recommend.py` | The six lookups the agent can call (section 4). `tools.py` also holds settings and database access. |
+| Agent tools | `backend/tools.py` | All six lookups the agent can call (section 4), plus settings and database access |
 | Data types | `backend/models.py` | Every Pydantic type (section 3) |
 | Safety | `backend/safety.py`, `backend/privacy.py` | Reply checks, embroidery check, crisis detection, rate limit; hiding card numbers and passwords |
 | Audit | `backend/audit.py` | The append-only audit trail (section 6) |
@@ -1709,7 +1709,7 @@ Eight features built after the redesign. Each lists where it lives and the rules
 
 ### 3. In stock in your size
 
-- `backend/recommend.py` `similar_in_size()` finds products with at least one unit in the
+- `similar_in_size()` (first in `backend/recommend.py`, now in `backend/tools.py`) finds products with at least one unit in the
   requested size. They are scored as follows:
   - **Same merchandise group:** 3 points each (e.g. "Also Pierson College").
   - **Same kind of garment:** 2 points (e.g. "Another crewneck").
@@ -1740,8 +1740,8 @@ Eight features built after the redesign. Each lists where it lives and the rules
 
 - **New agent tools** (registered in `agent.py`):
   - `recommend_size(product_id, usual_size, size_chart, fit, chest_inches)` in
-    `backend/sizing.py`, returning `SizeAdvice`.
-  - `similar_in_stock(product_id, size)` in `backend/recommend.py`, returning
+    `backend/tools.py` (first written in a separate `sizing.py`), returning `SizeAdvice`.
+  - `similar_in_stock(product_id, size)` in `backend/tools.py`, returning
     `InStockAlternative` items.
 - **How `recommend_size` works.** Our garments are a unisex cut, so sizes are on the
   unisex chart:
@@ -1913,3 +1913,14 @@ The group-order and share checks run on a temporary copy of the database.
 - **This file** was reorganized: Part 1 explains the finished system in one place, and the
   earlier notes became this build log.
 
+
+### Final cleanup after a grading review
+
+- The nav link to the products page now reads **Products**, as Problem 3 lists it. It was
+  "Shop all" after the redesign; the Products page heading and the footer match.
+- `recommend_size` and `similar_in_stock` moved from their own files (`sizing.py`,
+  `recommend.py`) into `backend/tools.py`. All six agent tools now live there, and the agent
+  is the four files the assignment names: `prompts/prompt.md`, `agent.py`, `tools.py`, and
+  `models.py`.
+- `requirements.txt` pins tested versions (PydanticAI kept below 3.0). `frontend/README.md`
+  now describes this project instead of the Vite template.

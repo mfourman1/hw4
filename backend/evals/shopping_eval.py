@@ -38,7 +38,7 @@ def check(name: str, ok: bool, detail: str = "") -> None:
 
 # --- The size chart matches the Home page size guide -------------------------------------
 print("Size chart")
-from sizing import CHEST, FIT_NOTES, SIZES, recommend_size, size_for_chest  # noqa: E402
+from tools import CHEST, FIT_NOTES, SIZES, recommend_size, size_for_chest  # noqa: E402
 
 guide = (tools.ROOT / "frontend" / "src" / "components" / "SizeGuide.tsx").read_text(encoding="utf-8")
 for chart, tsx_key in (("unisex", "mens"), ("womens", "womens")):
@@ -77,7 +77,7 @@ check("size_for_chest below the chart is XS", size_for_chest(28) == "XS")
 
 # --- similar_in_stock / alternatives -----------------------------------------------------
 print("similar_in_stock")
-from recommend import similar_in_size, similar_in_stock  # noqa: E402
+from tools import similar_in_size, similar_in_stock  # noqa: E402
 
 with tools.get_db() as con:
     sold_out = con.execute(

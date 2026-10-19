@@ -95,7 +95,7 @@ export default function NavBar() {
               to="/products"
               className={onShop && !activeCategory && !params.get('q') && !params.get('ids') && !params.get('group') ? 'active' : undefined}
             >
-              Shop all
+              Products
             </Link>
           </li>
           {SHOP_CATEGORIES.map((c) => (

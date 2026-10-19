@@ -14,8 +14,8 @@ How the agent is put together
                    on every run (chat_context below)
     history        earlier messages: from the database for logged-in shoppers, from the
                    browser for guests (main.py decides which)
-    tools          search_products, get_product_description, get_price, check_stock (tools.py),
-                   recommend_size (sizing.py), similar_in_stock (recommend.py)
+    tools          search_products, get_product_description, get_price, check_stock,
+                   recommend_size, similar_in_stock (all in tools.py)
     output         AgentReply (models.py): the reply text, product_ids to show as cards, and
                    show_on_page (browsing search: the website puts the cards on the page)
     checks         every $ price and stock count in the reply must match a tool result, and
@@ -64,7 +64,6 @@ from models import (
     SizeAdvice,
     StockReport,
 )
-from recommend import similar_in_stock
 from safety import (
     CRISIS_REPLY,
     claimed_action_problem,
@@ -73,7 +72,6 @@ from safety import (
     pressure_problem,
     promise_problem,
 )
-from sizing import recommend_size
 from tools import (
     LOW_STOCK,
     check_stock,
@@ -81,8 +79,10 @@ from tools import (
     get_product_description,
     make_model,
     product_cards,
+    recommend_size,
     resolve_page,
     search_products,
+    similar_in_stock,
     system_prompt,
 )
 

@@ -1,12 +1,13 @@
 """Settings, database access, and the tools the Campus Customs chat agent can call.
 
-Tools (registered on the agent in agent.py). Every one reads data/campus_customs.db.
+Tools (registered on the agent in agent.py). All six live in this file, and every one reads
+data/campus_customs.db.
     search_products           find catalogue items that match what the shopper is asking for
     get_product_description   full catalogue text for one product
     get_price                 current price for one product
     check_stock               units in stock for one product, by size (and one size if asked)
-    recommend_size            (sizing.py) which size to get, from the size chart, and its stock
-    similar_in_stock          (recommend.py) similar items that are in stock in a sold-out size
+    recommend_size            which size to get, from the size guide's chart, and its stock
+    similar_in_stock          similar items that are in stock in a sold-out size
 
 Helpers used by the agent and main.py
     get_db, ensure_schema, product_cards, image_url, short_description, normalize_size,
@@ -31,12 +32,15 @@ from pydantic_ai import ModelRetry
 from pydantic_ai.models.openai import OpenAIChatModel
 from pydantic_ai.providers.openai import OpenAIProvider
 
+from merch_groups import group_label, product_groups
 from models import (
     MAX_CHAT_CARDS,
     MAX_PAGE_RESULTS,
     ChatHistoryMessage,
     ChatReply,
     CustomerInfo,
+    FitPreference,
+    InStockAlternative,
     PageContext,
     PageInfo,
     PageType,
@@ -44,6 +48,8 @@ from models import (
     ProductDescription,
     ProductMatch,
     ProductPrice,
+    SizeAdvice,
+    SizeChart,
     SizeStock,
     StockReport,
     StockStatus,
@@ -503,6 +509,237 @@ def check_stock(product_id: str, size: str | None = None) -> StockReport:
         sold_out_sizes=[s.size for s in sizes if s.quantity == 0],
         total_in_stock=sum(s.quantity for s in sizes),
     )
+
+
+# --- Size advice: the recommend_size tool (the chat's fit finder) ---------------------------
+# The chart is the same one the Home page size guide shows
+# (frontend/src/components/SizeGuide.tsx); evals/shopping_eval.py checks the two still match.
+# Our garments are a unisex cut, so sizes are given on the unisex chart:
+#     chest measurement   -> the unisex size whose chest range fits it
+#     usual unisex size   -> that size
+#     usual women's size  -> the unisex size for the middle of that women's bust range
+#                            (a women's M, bust 35-36", is a unisex S)
+# then adjusted for how the shopper likes things to fit, and checked against stock.
+
+SIZES = SIZE_ORDER  # the size chart's columns, XS..XXL
+
+# Body measurements in inches, [min, max] for XS..XXL (SizeGuide.tsx MEASUREMENTS.*.chest).
+CHEST: dict[str, list[tuple[float, float]]] = {
+    "unisex": [(32, 34), (35, 37), (38, 40), (41, 43), (44, 46), (47, 49)],
+    "womens": [(31, 32), (33, 34), (35, 36), (37, 39), (40, 42), (43, 45)],
+}
+
+# How each kind of garment fits (SizeGuide.tsx PRODUCTS.*.fit).
+FIT_NOTES = {
+    "tee": "Classic fit. Cotton tees can shrink a little in a hot dryer, so wash cold if you are between sizes.",
+    "sweatshirt": (
+        "Relaxed fit for crewnecks, hoodies, and quarter-zips. Between sizes? Size down for a "
+        "closer fit, or up for that oversized library look."
+    ),
+    "jacket": "Cut with room to layer over a sweater. Between sizes? Take your usual size.",
+}
+
+
+def chart_kind(garment_type: str, name: str) -> str:
+    """Which size chart a product uses: tee, sweatshirt, or jacket (as productKind() in categories.ts)."""
+    kinds = garment_categories(garment_type, name)
+    if kinds & {"t-shirt", "long-sleeve"}:
+        return "tee"
+    if kinds & {"jacket", "fleece"}:
+        return "jacket"
+    return "sweatshirt"
+
+
+def size_for_chest(chest: float, chart: str = "unisex") -> str:
+    """The smallest size whose chest range reaches this measurement (between sizes: the larger)."""
+    for size, (_, high) in zip(SIZES, CHEST[chart]):
+        if chest <= high:
+            return size
+    return SIZES[-1]
+
+
+def _step(size: str, by: int) -> str:
+    i = SIZES.index(size) + by
+    return SIZES[max(0, min(i, len(SIZES) - 1))]
+
+
+def recommend_size(
+    product_id: str,
+    usual_size: str | None = None,
+    size_chart: SizeChart = "unisex",
+    fit: FitPreference = "regular",
+    chest_inches: float | None = None,
+) -> SizeAdvice:
+    """Recommend a size for one product, and check that size's stock.
+
+    Use this when a shopper asks what size to get or whether something will fit. You need
+    either their usual size or their chest/bust measurement first; ask for it if you don't
+    have it (and whether that's a women's or unisex/men's size, and how they like it to fit).
+
+    Args:
+        product_id: The product's product_id, copied exactly from search_products.
+        usual_size: The size the shopper usually wears, e.g. "M", "large", "XL".
+        size_chart: "womens" if their usual size is a women's size; otherwise "unisex"
+            (men's sizes are unisex sizes).
+        fit: How they like it to fit: "regular", "fitted" (closer), or "roomy" (oversized).
+        chest_inches: Their chest or bust measurement in inches, if they gave one. Used
+            instead of usual_size when both are given.
+    """
+    with get_db() as con:
+        row = _catalogue_row(con, product_id)
+        stock = {
+            r["size"]: r["quantity"]
+            for r in con.execute("SELECT size, quantity FROM inventory WHERE product_id = ?", (row["product_id"],))
+        }
+    kind = chart_kind(row["garment_type"], row["name"])
+
+    if chest_inches is not None:
+        if not 20 <= chest_inches <= 70:
+            raise ModelRetry("chest_inches should be the shopper's chest or bust in inches, between 20 and 70.")
+        size = size_for_chest(chest_inches)
+        reason = f'A {chest_inches:g}" {"bust" if size_chart == "womens" else "chest"} is an {size} on our unisex chart'
+    elif usual_size:
+        usual = normalize_size(usual_size)
+        if usual not in SIZES:
+            raise ModelRetry(f"usual_size should be one of {', '.join(SIZES)}; the shopper said {usual_size!r}.")
+        if size_chart == "womens":
+            low, high = CHEST["womens"][SIZES.index(usual)]
+            size = size_for_chest((low + high) / 2)
+            reason = f"Our garments are a unisex cut, and a women's {usual} is about a unisex {size}"
+        else:
+            size = usual
+            reason = f"You usually wear an {usual}"
+    else:
+        raise ModelRetry(
+            "Ask the shopper for their usual size (and whether it's a women's or unisex/men's size) "
+            "or their chest measurement before calling recommend_size."
+        )
+
+    if fit == "roomy":
+        size = _step(size, +1)
+        reason += f"; one size up, {size}, gives the roomier fit you like"
+    elif fit == "fitted" and kind == "sweatshirt":
+        size = _step(size, -1)
+        reason += f"; these run relaxed, so {size} fits closer"
+    elif fit == "fitted":
+        reason += "; tees are a classic fit, so that size already fits close" if kind == "tee" else (
+            "; jackets are cut to layer, so keep your usual size"
+        )
+
+    # Only sizes this product is made in.
+    offered = sorted(stock, key=size_sort_key)
+    if size not in stock and offered:
+        size = min(offered, key=lambda s: abs(SIZES.index(s) - SIZES.index(size)) if s in SIZES else 99)
+        reason += f"; the nearest size we make in this item is {size}"
+
+    quantity = stock.get(size, 0)
+    return SizeAdvice(
+        product_id=row["product_id"],
+        name=row["name"],
+        recommended_size=size,
+        reason=reason + ".",
+        fit_note=FIT_NOTES[kind],
+        recommended_size_status=_size_status(quantity),
+        recommended_size_quantity=quantity,
+        available_sizes=[s for s in offered if stock[s] > 0],
+    )
+
+
+# --- Similar items in stock: the similar_in_stock tool ------------------------------------
+# Used when a shopper's size has sold out: by the agent, on the product page
+# (GET /api/products/{id}/alternatives?size=L), and on shared wishlists. "Similar" means, in
+# order of weight: the same merchandise group (another Pierson College item), the same kind
+# of garment (another crewneck), and words in common in the name ("Champion Reverse Weave").
+# Only products with at least one unit in the requested size are returned.
+
+GROUP_WEIGHT = 3
+KIND_WEIGHT = 2
+WORD_WEIGHT = 1
+MAIN_KINDS = ["hoodie", "quarter-zip", "crewneck", "t-shirt", "jacket", "long-sleeve"]
+KIND_LABELS = {
+    "hoodie": "hoodie", "quarter-zip": "quarter-zip", "crewneck": "crewneck",
+    "t-shirt": "T-shirt", "jacket": "jacket", "long-sleeve": "long-sleeve shirt",
+}
+# Words every product shares, which say nothing about similarity.
+COMMON_WORDS = {
+    "yale", "t", "shirt", "tee", "crewneck", "hoodie", "zip", "1", "4", "jacket", "fleece",
+    "sweater", "college", "school", "of", "the", "left", "chest", "and", "vs",
+}
+
+
+def main_kind(row: sqlite3.Row) -> str | None:
+    kinds = garment_categories(row["garment_type"], row["name"])
+    return next((k for k in MAIN_KINDS if k in kinds), None)
+
+
+def _name_words(name: str) -> set[str]:
+    return {w for w in re.findall(r"[a-z0-9]+", name.lower()) if w not in COMMON_WORDS}
+
+
+def similar_in_size(
+    con: sqlite3.Connection, product_id: str, size: str | None, limit: int = 4
+) -> list[tuple[sqlite3.Row, str]]:
+    """Up to `limit` (product row, why) pairs, most similar first. With no size, any
+    product with stock counts."""
+    product = con.execute("SELECT * FROM catalogue WHERE product_id = ?", (product_id,)).fetchone()
+    if product is None:
+        return []
+    groups = set(product_groups(product["name"], product["description"]))
+    kind = main_kind(product)
+    words = _name_words(product["name"])
+
+    if size:
+        rows = con.execute(
+            "SELECT c.* FROM catalogue c JOIN inventory i ON i.product_id = c.product_id "
+            "WHERE i.size = ? AND i.quantity > 0 AND c.product_id != ?",
+            (size, product_id),
+        ).fetchall()
+    else:
+        rows = con.execute(
+            "SELECT c.* FROM catalogue c WHERE c.product_id != ? AND EXISTS "
+            "(SELECT 1 FROM inventory i WHERE i.product_id = c.product_id AND i.quantity > 0)",
+            (product_id,),
+        ).fetchall()
+
+    scored = []
+    for row in rows:
+        shared = sorted(groups & set(product_groups(row["name"], row["description"])))
+        same_kind = kind is not None and main_kind(row) == kind
+        common = words & _name_words(row["name"])
+        score = GROUP_WEIGHT * len(shared) + KIND_WEIGHT * same_kind + WORD_WEIGHT * len(common)
+        if score == 0:
+            continue
+        if shared:
+            why = f"Also {group_label(shared[0])}"
+        elif same_kind:
+            why = f"Another {KIND_LABELS[kind]}"
+        else:
+            why = "A similar style"
+        scored.append((score, row["name"], row, why))
+    scored.sort(key=lambda s: (-s[0], s[1]))
+    return [(row, why) for _, _, row, why in scored[:limit]]
+
+
+def similar_in_stock(product_id: str, size: str) -> list[InStockAlternative]:
+    """Find similar products that are in stock in the shopper's size.
+
+    Use this when the size a shopper wants is sold out (check_stock or recommend_size says
+    sold_out), so they still have something to buy. Results favor the same college, team,
+    school, or family group, then the same kind of garment. They have no price or stock
+    count: call get_price or check_stock before quoting either.
+
+    Args:
+        product_id: The sold-out product's product_id, copied exactly from a tool result.
+        size: The size the shopper wants, e.g. "M", "large", "XL".
+    """
+    wanted = normalize_size(size)
+    with get_db() as con:
+        row = _catalogue_row(con, product_id)
+        found = similar_in_size(con, row["product_id"], wanted, limit=4)
+    return [
+        InStockAlternative(product_id=r["product_id"], name=r["name"], garment_type=r["garment_type"], why=why)
+        for r, why in found
+    ]
 
 
 # --- Who is chatting and where (the agent's deps) ---------------------------------------

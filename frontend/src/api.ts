@@ -140,7 +140,7 @@ export async function logout() {
   await fetch('/api/auth/logout', { method: 'POST' })
 }
 
-// Similar items in stock in a size the shopper wanted but is sold out (recommend.py).
+// Similar items in stock in a size the shopper wanted but is sold out (backend tools.similar_in_size).
 export type AlternativeProduct = ProductSummary & { why: string }
 
 export function fetchAlternatives(productId: string, size: string, signal?: AbortSignal) {

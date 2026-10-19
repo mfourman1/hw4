@@ -1,32 +1,12 @@
-# React + TypeScript + Vite
+# Campus Customs: front end
 
-This template provides a minimal setup to get React working in Vite with HMR and some Oxlint rules.
+The React + Vite + TypeScript website for the Campus Customs shop and its chat assistant.
+See the main [README](../README.md) for how to run the whole project (the back end must be
+running on port 8000), and [`output/design.md`](../output/design.md) for the design.
 
-Currently, two official plugins are available:
-
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
-
-## React Compiler
-
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
-
-## Expanding the Oxlint configuration
-
-If you are developing a production application, we recommend enabling type-aware lint rules by installing `oxlint-tsgolint` and editing `.oxlintrc.json`:
-
-```json
-{
-  "$schema": "./node_modules/oxlint/configuration_schema.json",
-  "plugins": ["react", "typescript", "oxc"],
-  "options": {
-    "typeAware": true
-  },
-  "rules": {
-    "react/rules-of-hooks": "error",
-    "react/only-export-components": ["warn", { "allowConstantExport": true }]
-  }
-}
 ```
-
-See the [Oxlint rules documentation](https://oxc.rs/docs/guide/usage/linter/rules) for the full list of rules and categories.
+npm install
+npm run dev          # http://localhost:5173
+npm run dev:phone    # https on your local network, for the try-on camera on a phone
+npm run build        # production build in dist/
+```

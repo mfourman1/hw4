@@ -51,7 +51,6 @@ import audit
 from merch_groups import group_menu, product_groups
 from safety import ChatRateLimiter, embroidery_problem
 from privacy import redact, scrub_saved_chats
-from recommend import similar_in_size
 from auth import (
     DUMMY_HASH,
     SESSION_DAYS,
@@ -102,6 +101,7 @@ from tools import (
     resolve_page,
     save_chat_turn,
     saved_chat_messages,
+    similar_in_size,
     short_description,
     size_sort_key,
 )
@@ -172,7 +172,7 @@ def list_products() -> list[ProductSummary]:
 @app.get("/api/products/{product_id}/alternatives", response_model=list[AlternativeProduct])
 def product_alternatives(product_id: str, size: str | None = None, limit: int = 4) -> list[AlternativeProduct]:
     """Similar products (same group, then same kind of garment) in stock in `size`, for
-    when the shopper's size has sold out (recommend.py)."""
+    when the shopper's size has sold out (tools.similar_in_size)."""
     with get_db() as con:
         found = similar_in_size(
             con, product_id.strip().lower(), normalize_size(size) if size else None, max(1, min(limit, 8))

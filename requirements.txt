@@ -1,5 +1,7 @@
-fastapi
-uvicorn[standard]
-pydantic-ai-slim[openai]
-python-dotenv
-pillow  # only for backend/scripts/clean_photos.py
+# Back-end packages. Lower bounds are the versions this was built and tested with;
+# PydanticAI is kept below 3.0 so a future major version can't change the agent's API.
+fastapi>=0.143
+uvicorn[standard]>=0.54
+pydantic-ai-slim[openai]>=2.55,<3
+python-dotenv>=1.2
+pillow>=13  # only for backend/scripts/clean_photos.py

@@ -69,7 +69,7 @@ export default function Products() {
       ? categoryLabel(category) ?? 'Shop'
       : query
         ? `Results for “${query}”`
-        : 'Shop all'
+        : 'Products'
 
   return (
     <section className="page">

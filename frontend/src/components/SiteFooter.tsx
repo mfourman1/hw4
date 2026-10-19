@@ -14,7 +14,7 @@ export default function SiteFooter() {
           <p className="footer-heading">Shop</p>
           <ul>
             <li>
-              <Link to="/products">Shop all</Link>
+              <Link to="/products">Products</Link>
             </li>
             {SHOP_CATEGORIES.map((c) => (
               <li key={c.key}>

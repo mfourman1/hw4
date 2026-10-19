@@ -34,7 +34,7 @@ Log of the prompts I typed to my vibe coder (Claude Code) for each problem, in m
 
 ---
 
-## Problem 3: React + Vite front end and FastAPI backend
+## Problem 3: Build the Campus Customs website
 
 **Prompt:**
 
@@ -64,7 +64,7 @@ Log of the prompts I typed to my vibe coder (Claude Code) for each problem, in m
 
 ---
 
-## Problem 5: Agent backend for the shop chatbot
+## Problem 5: PydanticAI agent backend
 
 **Prompt:**
 
@@ -90,7 +90,7 @@ Log of the prompts I typed to my vibe coder (Claude Code) for each problem, in m
 
 ---
 
-## Problem 6: Lookup tools for description, price, and stock
+## Problem 6: Tools: product info and stock
 
 **Prompt:**
 
@@ -125,7 +125,7 @@ Log of the prompts I typed to my vibe coder (Claude Code) for each problem, in m
 
 ---
 
-## Problem 8: Customer memory and page context
+## Problem 8: Customer memory
 
 **Prompt:**
 
@@ -194,7 +194,7 @@ Log of the prompts I typed to my vibe coder (Claude Code) for each problem, in m
 
 ---
 
-## Problem 10: Redesign the website
+## Problem 10: Style the website
 
 **Prompt:**
 
@@ -244,7 +244,7 @@ Log of the prompts I typed to my vibe coder (Claude Code) for each problem, in m
 
 ---
 
-## Problem 11: Site testing
+## Problem 11: Site testing (app check)
 
 **Prompt:**
 
@@ -260,7 +260,7 @@ Log of the prompts I typed to my vibe coder (Claude Code) for each problem, in m
 
 ---
 
-## Problem 12: Audit trail, safety, and finishing the harness
+## Problem 12: Audit trail, safety, finish harness
 
 **Prompt:**
 

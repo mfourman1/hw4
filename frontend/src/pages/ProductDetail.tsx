@@ -34,7 +34,7 @@ export default function ProductDetail() {
     return (
       <section className="page">
         <Link to="/products" className="back-link">
-          ← Shop all
+          ← All products
         </Link>
         <p className="error">
           {status === 'not-found' ? "We couldn't find that product." : "We couldn't load this product. Is the backend running?"}
