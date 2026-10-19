@@ -1,0 +1,26 @@
+# Secrets: API keys stay on this computer (.env.example, with placeholders, is committed)
+.env
+.env.*
+!.env.example
+
+# Local-only data pack: the database and product images are not in git
+data/
+*.db
+*.sqlite
+*.zip
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+venv/
+
+# Node / front end build output (also in frontend/.gitignore)
+node_modules/
+dist/
+
+# Editors and tools
+.vscode/
+.idea/
+.claude/
+.DS_Store

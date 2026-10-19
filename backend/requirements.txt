@@ -1,0 +1,3 @@
+# The list lives in the hw4 folder (../requirements.txt), so `pip install -r requirements.txt`
+# works from either folder.
+-r ../requirements.txt

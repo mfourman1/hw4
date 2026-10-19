@@ -1,0 +1,117 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Campus Customs: Live App Check (Problem 11)</title>
+  <style>
+    :root { --navy: #0c233f; --steel: #4a74a0; --line: #e4e4e4; --pass: #1a7f37; }
+    * { box-sizing: border-box; }
+    body { margin: 0; font: 16px/1.6 system-ui, "Segoe UI", Arial, sans-serif; color: #2e2e2e; background: #f7f7f7; }
+    main { max-width: 1040px; margin: 0 auto; padding: 2rem 1.25rem 4rem; }
+    h1, h2 { color: var(--navy); line-height: 1.2; }
+    h1 { margin: 0 0 0.4rem; font-size: 2rem; }
+    h2 { margin: 0 0 0.75rem; font-size: 1.45rem; }
+    .meta { color: #606975; margin: 0 0 1.25rem; }
+    .summary { width: 100%; border-collapse: collapse; background: #fff; margin: 0 0 2rem; border: 1px solid var(--line); }
+    .summary th, .summary td { text-align: left; padding: 0.55rem 0.8rem; border-bottom: 1px solid var(--line); }
+    .summary th { background: var(--navy); color: #fff; font-weight: 600; }
+    .pass { display: inline-block; padding: 0.1rem 0.6rem; border-radius: 999px; background: #e6f4ea; color: var(--pass); font-weight: 700; font-size: 0.85rem; }
+    section.check { background: #fff; border: 1px solid var(--line); border-radius: 8px; padding: 1.5rem; margin: 0 0 2rem; }
+    figure { margin: 0 0 1.25rem; }
+    figure img { display: block; width: 100%; height: auto; border: 1px solid var(--line); border-radius: 6px; }
+    figure.narrow img { max-width: 560px; }
+    figcaption { margin-top: 0.6rem; }
+    figcaption strong { color: var(--navy); }
+    .asked { margin: 0 0 1rem; padding: 0.6rem 0.9rem; border-left: 3px solid var(--steel); background: #f2f6fa; }
+    table.db { border-collapse: collapse; margin: 0.25rem 0 0.5rem; font-size: 0.95rem; }
+    table.db th, table.db td { border: 1px solid var(--line); padding: 0.3rem 0.75rem; text-align: center; }
+    table.db th { background: #f2f6fa; color: var(--navy); }
+    .small { font-size: 0.9rem; color: #606975; }
+    code { background: #f2f2f2; padding: 0.05rem 0.3rem; border-radius: 4px; }
+  </style>
+</head>
+<body>
+<main>
+  <h1>Campus Customs: Live App Check</h1>
+  <p class="meta">
+    Problem 11 · Tested live on October 18, 2026 (10:07 PM ET) in Microsoft Edge, against the running site
+    (React front end at <code>localhost:5173</code>, FastAPI backend at <code>localhost:8000</code>, data from
+    <code>data/campus_customs.db</code>). Shopping as a guest with an empty browser.
+    Click any screenshot to open it full size.
+  </p>
+
+  <table class="summary">
+    <thead><tr><th>#</th><th>Check</th><th>Result</th></tr></thead>
+    <tbody>
+      <tr><td>1</td><td>Chat checks an item's stock and price, honestly, from the database</td><td><span class="pass">PASS</span></td></tr>
+      <tr><td>2</td><td>A category question in the chat puts search-result cards on the page</td><td><span class="pass">PASS</span></td></tr>
+      <tr><td>3</td><td>Shopping cart (Problem 9)</td><td><span class="pass">PASS</span></td></tr>
+    </tbody>
+  </table>
+
+  <section class="check" id="check-1">
+    <h2>1. Chat checks an item's stock and price (honest, from the database)</h2>
+    <p class="asked"><strong>Asked on the Pierson College Crewneck page:</strong> “How many of these do you have in a medium, and how much is it? Is a large available?”</p>
+
+    <figure>
+      <a href="app_check_images/inventory.png"><img src="app_check_images/inventory.png" alt="Chat panel: Handsome Dan answers that the Pierson College Crewneck is $58.00, with 8 in medium and large out of stock"></a>
+      <figcaption>
+        <strong>Proves:</strong> the chat answered “$58.00. We have 8 in medium; large is out of stock,” which matches the database
+        exactly (table below). It understood “these” as the product on screen, and it reported the sold-out size instead
+        of guessing.
+      </figcaption>
+    </figure>
+
+    <figure class="narrow">
+      <a href="app_check_images/inventory_page.png"><img src="app_check_images/inventory_page.png" alt="The same product page with the chat closed: $58.00, M 8 in stock, L sold out"></a>
+      <figcaption>
+        <strong>Proves:</strong> the product page, which reads the same database, shows the same numbers: $58.00, M 8 in stock,
+        and L sold out.
+      </figcaption>
+    </figure>
+
+    <p class="small">Database (<code>catalogue.price</code> and <code>inventory.quantity</code> for <code>pierson-college-crewneck</code>), read at test time:</p>
+    <table class="db">
+      <tr><th>Price</th><th>XS</th><th>S</th><th>M</th><th>L</th><th>XL</th><th>XXL</th></tr>
+      <tr><td>$58.00</td><td>12</td><td>2</td><td><strong>8</strong></td><td><strong>0</strong></td><td>0</td><td>2</td></tr>
+    </table>
+  </section>
+
+  <section class="check" id="check-2">
+    <h2>2. Dynamic search-result cards after a category question (hoodies)</h2>
+    <p class="asked"><strong>Asked on the Home page:</strong> “What hoodies do you have?”</p>
+
+    <figure>
+      <a href="app_check_images/search_cards.png"><img src="app_check_images/search_cards.png" alt="Results page titled From your chat search: Hoodies, showing 27 product cards next to the chat reply"></a>
+      <figcaption>
+        <strong>Proves:</strong> the chat's answer changed the page to “From your chat search · Hoodies” with 27 product cards
+        (photo, name, price, short description). That's all 27 hoodies in the catalogue. The cards still work as links:
+        clicking the first one opened the Basic Hoodie Big Yale product page.
+      </figcaption>
+    </figure>
+  </section>
+
+  <section class="check" id="check-3">
+    <h2>3. Shopping cart (Problem 9)</h2>
+    <p class="asked"><strong>Added on the product pages:</strong> 2 × Pierson College Crewneck, size M, with “Class of 2027” embroidered in gold
+      on the left chest, and 1 × 2025 Yale Vs Harvard T Shirt, size L. Each add showed a confirmation (“Added 2 × size M to your cart”).</p>
+
+    <figure>
+      <a href="app_check_images/cart.png"><img src="app_check_images/cart.png" alt="Cart page with the two items, quantities, embroidery, and a $168.00 estimated total"></a>
+      <figcaption>
+        <strong>Proves:</strong> the cart keeps each item's size, color, embroidery, and quantity, and totals them correctly:
+        2 × ($58.00 + $10.00 embroidery) + $32.00 = $168.00, with “Cart 3” in the header. There's no checkout, as decided
+        in Problem 9: the cart is a list to bring to the shop at 57 Broadway.
+      </figcaption>
+    </figure>
+  </section>
+
+  <p class="small">
+    How this was run: <code>node tests/app_check.mjs</code> (from the Homework 4 folder, with both servers running). The script
+    drives Edge, asks the real chat agent the questions above, adds the items to the cart, saves these screenshots,
+    and writes what it saw to <a href="app_check_images/results.json">app_check_images/results.json</a>.
+  </p>
+</main>
+</body>
+</html>

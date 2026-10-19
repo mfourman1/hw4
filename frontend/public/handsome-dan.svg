@@ -1,0 +1,124 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" role="img" aria-labelledby="t">
+  <title id="t">Handsome Dan, Yale's bulldog (caricature)</title>
+  <defs>
+    <radialGradient id="bg" cx="50%" cy="38%" r="72%">
+      <stop offset="0" stop-color="#e6edf5"/>
+      <stop offset="1" stop-color="#aebfd4"/>
+    </radialGradient>
+    <radialGradient id="face" cx="50%" cy="30%" r="80%">
+      <stop offset="0" stop-color="#fffdf9"/>
+      <stop offset="0.7" stop-color="#f4eee5"/>
+      <stop offset="1" stop-color="#e0d5c5"/>
+    </radialGradient>
+    <linearGradient id="tongue" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#f58fa2"/>
+      <stop offset="1" stop-color="#e2667f"/>
+    </linearGradient>
+    <clipPath id="sweaterClip">
+      <path d="M10 200 C 16 168, 50 152, 100 150 C 150 152, 184 168, 190 200 Z"/>
+    </clipPath>
+    <clipPath id="circle">
+      <circle cx="100" cy="100" r="100"/>
+    </clipPath>
+  </defs>
+
+  <g clip-path="url(#circle)" stroke-linecap="round" stroke-linejoin="round">
+    <rect width="200" height="200" fill="url(#bg)"/>
+
+    <!-- Navy sweater with a ribbed knit -->
+    <path d="M10 200 C 16 168, 50 152, 100 150 C 150 152, 184 168, 190 200 Z" fill="#1d2a45" stroke="#121a2c" stroke-width="3"/>
+    <g clip-path="url(#sweaterClip)" stroke="#2d3f66" stroke-width="3.5" opacity="0.9">
+      <path d="M26 166 V200 M38 161 V200 M50 157 V200 M62 155 V200 M74 154 V200 M86 153 V200 M114 153 V200 M126 154 V200 M138 155 V200 M150 157 V200 M162 161 V200 M174 166 V200"/>
+    </g>
+
+    <!-- Blue bow tie with a little triangle pattern (tucked under his chin) -->
+    <g transform="translate(0 6)">
+    <path d="M100 186 L 70 172 Q 62 186 70 200 Z" fill="#7096c9" stroke="#1d2a45" stroke-width="3"/>
+    <path d="M100 186 L 130 172 Q 138 186 130 200 Z" fill="#7096c9" stroke="#1d2a45" stroke-width="3"/>
+    <g fill="#e9f0fa">
+      <path d="M74 180 l3 -5 l3 5 z"/><path d="M83 186 l3 -5 l3 5 z"/><path d="M74 192 l3 -5 l3 5 z"/>
+      <path d="M120 180 l3 -5 l3 5 z"/><path d="M111 186 l3 -5 l3 5 z"/><path d="M120 192 l3 -5 l3 5 z"/>
+    </g>
+    <rect x="92" y="178" width="16" height="16" rx="5" fill="#5a7fb4" stroke="#1d2a45" stroke-width="3"/>
+    </g>
+
+    <g transform="translate(0 -10)">
+    <!-- Rose ears: small folded flaps -->
+    <path d="M62 50 C 50 40, 34 40, 22 50 C 16 58, 20 68, 32 70 C 42 66, 54 58, 62 50 Z" fill="#a8744b" stroke="#2a2630" stroke-width="3"/>
+    <path d="M56 50 C 46 46, 34 48, 27 55" fill="none" stroke="#6f4429" stroke-width="3"/>
+    <path d="M138 50 C 150 40, 166 40, 178 50 C 184 58, 180 68, 168 70 C 158 66, 146 58, 138 50 Z" fill="#46322a" stroke="#2a2630" stroke-width="3"/>
+    <path d="M144 50 C 154 46, 166 48, 173 55" fill="none" stroke="#24180f" stroke-width="3"/>
+
+    <!-- Head: narrower brow, cheeks flaring into heavy jowls, a round chin -->
+    <path d="M100 40 C 136 40, 158 52, 164 74 C 168 90, 176 104, 180 120 C 185 140, 172 156, 152 158 C 138 162, 122 180, 100 180 C 78 180, 62 162, 48 158 C 28 156, 15 140, 20 120 C 24 104, 32 90, 36 74 C 42 52, 64 40, 100 40 Z" fill="url(#face)" stroke="#2a2630" stroke-width="3"/>
+
+    <!-- Forehead wrinkles, lifted -->
+    <g fill="none" stroke="#cdbfac" stroke-width="3">
+      <path d="M80 52 Q 100 45 120 52"/>
+      <path d="M85 60 Q 100 55 115 60"/>
+    </g>
+
+    <!-- Happy raised brows -->
+    <g fill="none" stroke="#8f7c64" stroke-width="3.5">
+      <path d="M52 70 Q 63 61 77 66"/>
+      <path d="M148 70 Q 137 61 123 66"/>
+    </g>
+
+    <!-- Bright, smiling eyes (cheeks pushed up underneath) -->
+    <g>
+      <ellipse cx="66" cy="85" rx="11" ry="10.5" fill="#fff" stroke="#2a2630" stroke-width="2.5"/>
+      <circle cx="67" cy="84" r="7.5" fill="#bf8732"/>
+      <circle cx="67" cy="84" r="4.4" fill="#1b1716"/>
+      <circle cx="69.6" cy="81.4" r="2.3" fill="#fff"/>
+      <circle cx="64.4" cy="87" r="1.1" fill="#fff"/>
+      <path d="M53 90 Q 66 82 79 90 L 81 100 L 51 100 Z" fill="#f5efe6"/>
+      <path d="M53 90 Q 66 82 79 90" fill="none" stroke="#2a2630" stroke-width="3"/>
+
+      <ellipse cx="134" cy="85" rx="11" ry="10.5" fill="#fff" stroke="#2a2630" stroke-width="2.5"/>
+      <circle cx="133" cy="84" r="7.5" fill="#bf8732"/>
+      <circle cx="133" cy="84" r="4.4" fill="#1b1716"/>
+      <circle cx="135.6" cy="81.4" r="2.3" fill="#fff"/>
+      <circle cx="130.4" cy="87" r="1.1" fill="#fff"/>
+      <path d="M147 90 Q 134 82 121 90 L 119 100 L 149 100 Z" fill="#f5efe6"/>
+      <path d="M147 90 Q 134 82 121 90" fill="none" stroke="#2a2630" stroke-width="3"/>
+    </g>
+
+    <!-- Rosy cheeks -->
+    <ellipse cx="50" cy="104" rx="10" ry="6" fill="#f3a7a9" opacity="0.55"/>
+    <ellipse cx="150" cy="104" rx="10" ry="6" fill="#f3a7a9" opacity="0.55"/>
+
+    <!-- Big open grin: a row of little lower teeth on one side, and the tongue lolling out
+         over the lower lip on the other, hanging down past his chin -->
+    <path d="M68 146 C 86 153, 120 154, 142 145 C 140 164, 124 174, 104 175 C 84 175, 70 164, 68 146 Z" fill="#5f2530" stroke="#2a2630" stroke-width="3"/>
+    <g fill="#fffaf0" stroke="#2a2630" stroke-width="1.6">
+      <path d="M75 168 L 78 156 L 84 171 Z"/>
+      <rect x="86" y="166" width="5.5" height="7" rx="2"/>
+      <rect x="92" y="167" width="5.5" height="7" rx="2"/>
+      <rect x="98" y="167" width="5.5" height="7" rx="2"/>
+      <path d="M103 175 L 106 162 L 110 174 Z"/>
+    </g>
+    <path d="M110 163 C 116 152, 134 150, 142 156 C 152 164, 155 180, 151 190 C 147 199, 132 199, 130 190 C 128 182, 124 176, 116 172 C 110 170, 107 167, 110 163 Z" fill="url(#tongue)" stroke="#2a2630" stroke-width="3"/>
+    <path d="M122 159 C 133 162, 141 174, 140 188" fill="none" stroke="#c8506a" stroke-width="2.5"/>
+    <ellipse cx="146" cy="174" rx="2.2" ry="6" fill="#fff" opacity="0.4" transform="rotate(-12 146 174)"/>
+
+    <!-- Heavy jowls (upper lips) curling up into the smile, with whisker dots -->
+    <path d="M100 124 C 88 114, 56 112, 40 128 C 30 142, 44 158, 66 152 C 84 148, 97 138, 100 124 Z" fill="url(#face)" stroke="#2a2630" stroke-width="3"/>
+    <path d="M100 124 C 112 114, 144 112, 160 128 C 170 142, 156 158, 134 152 C 116 148, 103 138, 100 124 Z" fill="url(#face)" stroke="#2a2630" stroke-width="3"/>
+    <ellipse cx="62" cy="142" rx="17" ry="6.5" fill="#f0a1a4" opacity="0.55"/>
+    <ellipse cx="138" cy="142" rx="17" ry="6.5" fill="#f0a1a4" opacity="0.55"/>
+    <g fill="#b7a893">
+      <circle cx="66" cy="127" r="1.7"/><circle cx="74" cy="124" r="1.7"/><circle cx="58" cy="133" r="1.7"/><circle cx="70" cy="133" r="1.7"/><circle cx="82" cy="129" r="1.7"/>
+      <circle cx="134" cy="127" r="1.7"/><circle cx="126" cy="124" r="1.7"/><circle cx="142" cy="133" r="1.7"/><circle cx="130" cy="133" r="1.7"/><circle cx="118" cy="129" r="1.7"/>
+    </g>
+    <!-- smile creases at the corners of the mouth -->
+    <path d="M44 146 Q 40 152 44 158 M156 146 Q 160 152 156 158" fill="none" stroke="#2a2630" stroke-width="2.5"/>
+
+    <!-- The bulldog "nose rope" fold and big black nose -->
+    <path d="M72 103 C 84 92, 116 92, 128 103" fill="none" stroke="#c4b39c" stroke-width="3.5"/>
+    <path d="M80 108 Q 100 98 120 108 Q 124 120 109 123 Q 100 126 91 123 Q 76 120 80 108 Z" fill="#1d1b1f" stroke="#0e0c0f" stroke-width="2"/>
+    <ellipse cx="93" cy="107" rx="7" ry="2.8" fill="#615e6b" opacity="0.85"/>
+    <path d="M87 117 Q 91 114 95 117 M105 117 Q 109 114 113 117" fill="none" stroke="#000" stroke-width="2.5"/>
+    <path d="M100 125 V 133" fill="none" stroke="#2a2630" stroke-width="2.5"/>
+    </g>
+  </g>
+</svg>

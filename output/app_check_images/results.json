@@ -1,0 +1,124 @@
+{
+  "checkedAt": "2026-10-19T02:07:29.476Z",
+  "inventory": {
+    "image": "app_check_images/inventory.png",
+    "pageImage": "app_check_images/inventory_page.png",
+    "tiles": [
+      "XS: 12 in stock",
+      "S: Only 2 left",
+      "M: 8 in stock",
+      "L: Sold out",
+      "XL: Sold out",
+      "XXL: Only 2 left"
+    ],
+    "question": "How many of these do you have in a medium, and how much is it? Is a large available?",
+    "reply": "The Pierson College Crewneck is $58.00. We have 8 in medium; large is out of stock. Available sizes include XS, S, M, and XXL.",
+    "database": {
+      "name": "Pierson College Crewneck",
+      "price": 58,
+      "sizes": [
+        {
+          "size": "XS",
+          "quantity": 12
+        },
+        {
+          "size": "S",
+          "quantity": 2
+        },
+        {
+          "size": "M",
+          "quantity": 8
+        },
+        {
+          "size": "L",
+          "quantity": 0
+        },
+        {
+          "size": "XL",
+          "quantity": 0
+        },
+        {
+          "size": "XXL",
+          "quantity": 2
+        }
+      ]
+    }
+  },
+  "searchCards": {
+    "image": "app_check_images/search_cards.png",
+    "question": "What hoodies do you have?",
+    "reply": "Here are our hoodies—I’ve put all the hoodie styles on the page for you, including classic Yale, family, team, and sport options.",
+    "page": {
+      "url": "/products?results=Hoodies&ids=basic-hoodie-big-yale%2Cbrooks-brothers-double-knit-full-zip-hoodie-yale%2Cchampion-full-zip-hood%2Cchampion-reverse-weave-hoodie-1%2Ccrew-left-chest-hoodie%2Cdistrict-vit-hoodie-vintage-bulldog%2Cdistrict-vit-hoodie-vintage-sailor-bulldog%2Cfencing-left-chest-hoodie%2Cice-hockey-left-chest-hoodie%2Csailing-left-chest-hoodie%2Csquash-left-chest-hoodie%2Cthe-forest-school-hoodie%2Cua-gameday-double-knit-hood%2Cvolleyball-left-chest-hoodie%2Cyale-aunt-hoodie%2Cyale-dad-hoodie%2Cyale-grandma-hoodie%2Cyale-grandpa-hoodie%2Cyale-mom-hoodie%2Cyale-sports-hoodie-baseball%2Cyale-sports-hoodie-diving%2Cyale-sports-hoodie-golf%2Cyale-sports-hoodie-hockey%2Cyale-sports-hoodie-soccer%2Cyale-sports-hoodie-swimming%2Cyale-sports-hoodie-tennis%2Cyale-uncle-hoodie",
+      "heading": "Hoodies",
+      "banner": "From your chat searchHoodiesShow all products",
+      "cards": [
+        "Basic Hoodie Big Yale",
+        "Brooks Brothers Double Knit Full Zip Hoodie Yale",
+        "Champion Full Zip Hood",
+        "Champion Reverse Weave Hoodie 1",
+        "Crew Left Chest Hoodie",
+        "District Vit Hoodie Vintage Bulldog",
+        "District Vit Hoodie Vintage Sailor Bulldog",
+        "Fencing Left Chest Hoodie",
+        "Ice Hockey Left Chest Hoodie",
+        "Sailing Left Chest Hoodie",
+        "Squash Left Chest Hoodie",
+        "The Forest School Hoodie",
+        "Ua Gameday Double Knit Hood",
+        "Volleyball Left Chest Hoodie",
+        "Yale Aunt Hoodie",
+        "Yale Dad Hoodie",
+        "Yale Grandma Hoodie",
+        "Yale Grandpa Hoodie",
+        "Yale Mom Hoodie",
+        "Yale Sports Hoodie Baseball",
+        "Yale Sports Hoodie Diving",
+        "Yale Sports Hoodie Golf",
+        "Yale Sports Hoodie Hockey",
+        "Yale Sports Hoodie Soccer",
+        "Yale Sports Hoodie Swimming",
+        "Yale Sports Hoodie Tennis",
+        "Yale Uncle Hoodie"
+      ],
+      "catalogueHoodies": 27
+    },
+    "firstCardOpens": {
+      "url": "/products/basic-hoodie-big-yale",
+      "title": "Basic Hoodie Big Yale"
+    }
+  },
+  "cart": {
+    "image": "app_check_images/cart.png",
+    "added": [
+      "Added 2 × size M to your cart. View cart",
+      "Added 1 × size L to your cart. View cart"
+    ],
+    "cart": {
+      "lines": [
+        {
+          "name": "Pierson College Crewneck",
+          "details": "Size M · navy · $58.00",
+          "embroidery": "Embroidery: “Class of 2027”, left chest, below the logo, gold thread (+$10.00)",
+          "quantity": "2",
+          "lineTotal": "$136.00"
+        },
+        {
+          "name": "2025 Yale Vs Harvard T Shirt",
+          "details": "Size L · heather gray · $32.00",
+          "embroidery": null,
+          "quantity": "1",
+          "lineTotal": "$32.00"
+        }
+      ],
+      "summary": [
+        "Items: 3",
+        "Garments: $148.00",
+        "Embroidery (2 × $10.00): $20.00",
+        "Estimated total: $168.00"
+      ],
+      "cartCount": "3",
+      "note": "Online checkout and payment aren't available on this site. Bring your list to Campus Customs at 57 Broadway, New Haven, to buy in person."
+    }
+  }
+}
